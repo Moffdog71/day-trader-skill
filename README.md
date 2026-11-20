@@ -21,6 +21,12 @@ an order on its own. Paper trading is the default.
 > [github.com/Jakeschincariol/trader-skill](https://github.com/Jakeschincariol/trader-skill).
 > This repo is its day-trading sequel: the Trader skill v2.
 
+> **This fork's defaults.** `trader-budget/config.example.json` ships tighter
+> limits than upstream: $25 max loss per trade, $75 max daily loss and 2 trades
+> a day (upstream: $50 / $150 / 3). Put your real numbers in your local
+> `trader/config.json`, which is never committed. The worked examples below
+> still use upstream's $50 limit.
+
 ## Install
 
 Paste this into Claude:
