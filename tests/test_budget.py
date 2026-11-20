@@ -9,7 +9,11 @@ from _load import load, ROOT, FIX
 
 size = load("trader-budget", "size")
 
-CFG = os.path.join(ROOT, "trader-budget", "config.example.json")
+CFG = os.path.join(ROOT, "tests", "fixtures", "trader-budget", "config-upstream.json")
+SHIPPED_CFG = os.path.join(ROOT, "trader-budget", "config.example.json")
+# This fork ships more conservative limits than upstream; the tests keep the
+# upstream numbers (fixture above) so the worked examples stay the same.
+FORK_OVERRIDES = {"max_loss_per_trade_usd": 25, "max_daily_loss_usd": 75, "max_trades_per_day": 2}
 PLAN = os.path.join(FIX, "trader-budget", "plan-tsla.json")
 TARGETS = os.path.join(ROOT, "trader-budget", "targets.example.json")
 TOP5 = os.path.join(FIX, "trader-budget", "berkshire-q2-2026-top5.json")
@@ -79,6 +83,8 @@ class TheReel(unittest.TestCase):
     def test_config_example_is_the_contract(self):
         with open(CFG) as fh:
             self.assertEqual(json.load(fh), CONTRACT_CFG)
+        with open(SHIPPED_CFG) as fh:
+            self.assertEqual(json.load(fh), dict(CONTRACT_CFG, **FORK_OVERRIDES))
 
     def test_tsla_is_8_shares_bound_by_the_max_loss(self):
         s = size.size_trade(plan(), cfg(), today=TODAY)
